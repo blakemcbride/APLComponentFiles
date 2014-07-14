@@ -21,7 +21,7 @@
  BIG∆NEW:'→TRY∆AGAIN'⎕EA'r←(''insert into '',tbl,'' (ikey, ldata) values (?, ?);'')SQL∆Exec[_CF_DB] cid data2'
  _CF_MAP[i;3]←cid+1
  →0
- ⍝ Is is possible that some other application appended a new component and our max is out-of-sync.
+ ⍝ It is possible that some other application appended a new component and our max is out-of-sync.
  ⍝ Update component ID and try again.
  TRY∆AGAIN:⎕ES(_CF_MAX_TRIES<n←n+1)/'APPEND ERROR'
  cid←_CF_NEXT tbl
@@ -48,14 +48,14 @@
 ∇
 
 ∇type CF_DBCONNECT params
- ⍎(0=⎕NC 'SQL')/'⎕ES(''SQL''≢''lib_sql.so''⎕FX''SQL'')/''Error loadin SQL library'''
+ ⍎(0=⎕NC 'SQL')/'⎕ES(''SQL''≢''lib_sql.so''⎕FX''SQL'')/''Error loading SQL library'''
  '⎕ES''DBCONNECT ERROR'''⎕EA'_CF_DB←type SQL∆Connect params'
  _CF_MAP←0 3⍴0
  _CF_MAX_TRIES←30
 ∇
 
 ∇type CF_DBCREATE params;cmd;db
- ⍎(0=⎕NC 'SQL')/'⎕ES(''SQL''≢''lib_sql.so''⎕FX''SQL'')/''Error loadin SQL library'''
+ ⍎(0=⎕NC 'SQL')/'⎕ES(''SQL''≢''lib_sql.so''⎕FX''SQL'')/''Error loading SQL library'''
  '⎕ES''DBCONNECT ERROR'''⎕EA'db←type SQL∆Connect params'
  cmd←'create table _apl_component_files ('
  cmd←cmd,'file_name character varying (80) not null unique);'

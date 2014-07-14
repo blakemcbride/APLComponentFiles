@@ -1,8 +1,8 @@
 
 Component File System instructions
 
-The SQL library must be built prior to using the component file system.
-See SQL_README.txt
+GNU APL must be built with SQL support prior to using the component
+file system.  See SQL_README.txt
 
 The component file system utilizes the workspace named ComponentFiles.
 This is contained in a file names ComponentFiles.apl This workspace
