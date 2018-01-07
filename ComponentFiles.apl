@@ -1,9 +1,7 @@
-#!/usr/local/bin/apl --script --
-
+#!/usr/local/bin/apl --script
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 ⍝
-⍝ ComponentFiles 2014-07-14 12:26:28 (GMT-5)
-⍝
+⍝ ComponentFiles 2018-01-06  20:04:57 (GMT-5)
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 
 ∇cid←data CF_APPEND fh;r;tbl;⎕IO;i;n;data2
@@ -237,20 +235,20 @@
 
 ⎕CT←1E¯13
 
-⎕FC←6⍴(,⎕UCS 46 44 8902 48 95 175)
+⎕FC←(,⎕UCS 46 44 8902 48 95 175)
 
 ⎕IO←1
 
 ⎕L←0
 
-⎕LX←' '
-  ⎕LX←0⍴⎕LX
+⎕LX←' ' ⍝ proto 1
+  ⎕LX←0⍴⎕LX ⍝ proto 2
 
 ⎕PP←10
 
-⎕PR←1⍴' '
+⎕PR←,' '
 
-⎕PS←0
+⎕PS←0 0
 
 ⎕PW←80
 
@@ -258,7 +256,7 @@
 
 ⎕RL←1
 
-⎕TZ←-5
+⎕TZ←¯5
 
 ⎕X←0
 
