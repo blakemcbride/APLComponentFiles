@@ -19,7 +19,7 @@ Facilities for this are provided.
 
 This package depends upon the following:
 
-GNU APL by Juergen Sauermann (<juergen.sauermann@t-online.de>)
+GNU APL by Dr. Jürgen Sauermann (<mail@jürgen-sauermann.de>)
 [http://www.gnu.org/software/apl/apl.html](http://www.gnu.org/software/apl/apl.html)
 
 Subversion:  [http://svn.savannah.gnu.org/svn/apl/trunk](http://svn.savannah.gnu.org/svn/apl/trunk)
