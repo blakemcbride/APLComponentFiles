@@ -1,10 +1,9 @@
-#!/usr/local/bin/apl --script
- ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
-⍝
-⍝ ComponentFiles 2023-01-16  07:04:57 (GMT-5)
- ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
-
-)COPY 5 SQL
+#!/usr/bin/env -S apl --script
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+⍝                                                                    ⍝
+⍝ ComponentFiles                       2026-03-09  05:40:54 (GMT-6)  ⍝
+⍝                                                                    ⍝
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
 
 ∇cid←data CF_APPEND fh;r;tbl;⎕IO;i;n;data2
  ⎕IO←1
@@ -15,10 +14,10 @@
  data2←14 ⎕CR data
  n←0
  LOOP:→(2000<⍴data2)/BIG∆NEW
- '→TRY∆AGAIN'⎕EA'r←(''insert into '',tbl,'' (ikey, sdata) values (?, ?);'')SQL∆Exec[_CF_DB] cid data2'
+ '→TRY∆AGAIN'⎕EA'r←(''insert into '',tbl,'' (ikey, sdata) values (?, ?);'')⎕SQL[4,_CF_DB] cid data2'
  _CF_MAP[i;3]←cid+1
  →0
- BIG∆NEW:'→TRY∆AGAIN'⎕EA'r←(''insert into '',tbl,'' (ikey, ldata) values (?, ?);'')SQL∆Exec[_CF_DB] cid data2'
+ BIG∆NEW:'→TRY∆AGAIN'⎕EA'r←(''insert into '',tbl,'' (ikey, ldata) values (?, ?);'')⎕SQL[4,_CF_DB] cid data2'
  _CF_MAP[i;3]←cid+1
  →0
  ⍝ It is possible that some other application appended a new component and our max is out-of-sync.
@@ -42,24 +41,24 @@
  cmd←cmd,'ikey INTEGER NOT NULL PRIMARY KEY, '
  cmd←cmd,'sdata CHARACTER VARYING(2000),'
  cmd←cmd,'ldata text);'
- '⎕ES''CREATE TABLE ERROR'''⎕EA'r←cmd SQL∆Exec[_CF_DB] '''''
- r←'insert into _apl_component_files (file_name) values (?);' SQL∆Exec[_CF_DB] ⊂fnm
+ '⎕ES''CREATE TABLE ERROR'''⎕EA'r←cmd ⎕SQL[4,_CF_DB] '''''
+ r←'insert into _apl_component_files (file_name) values (?);' ⎕SQL[4,_CF_DB] ⊂fnm
  r←_CF_ADD fnm
 ∇
 
 ∇type CF_DBCONNECT params
  ⍎(0=⎕NC 'SQL')/'⎕ES(''SQL''≢''lib_sql.so''⎕FX''SQL'')/''Error loading SQL library'''
- '⎕ES''DBCONNECT ERROR'''⎕EA'_CF_DB←type SQL∆Connect params'
+ '⎕ES''DBCONNECT ERROR'''⎕EA'_CF_DB←type ⎕SQL[1] params'
  _CF_MAP←0 3⍴0
  _CF_MAX_TRIES←30
 ∇
 
 ∇type CF_DBCREATE params;cmd;db
  ⍎(0=⎕NC 'SQL')/'⎕ES(''SQL''≢''lib_sql.so''⎕FX''SQL'')/''Error loading SQL library'''
- '⎕ES''DBCONNECT ERROR'''⎕EA'db←type SQL∆Connect params'
+ '⎕ES''DBCONNECT ERROR'''⎕EA'db←type ⎕SQL[1] params'
  cmd←'create table _apl_component_files ('
  cmd←cmd,'file_name character varying (80) not null unique);'
- '⎕ES''DBCREATE ERROR'''⎕EA'cmd←cmd SQL∆Exec[db]'''''
+ '⎕ES''DBCREATE ERROR'''⎕EA'cmd←cmd ⎕SQL[4,db]'''''
  _CF_DB←db
  _CF_MAP←0 3⍴0
  _CF_MAX_TRIES←30
@@ -70,13 +69,13 @@
  r←⎕EX '_CF_DB'
  r←⎕EX '_CF_MAP'
  r←⎕EX '_CF_MAX_TRIES'
- '⎕ES''DISCONNECT ERROR'''⎕EA'r←SQL∆Disconnect db'
+ '⎕ES''DISCONNECT ERROR'''⎕EA'r← ⎕SQL[2]db'
 ∇
 
 ∇z←CF_ERASE fnm
  ⎕ES((' '≠1↑0⍴fnm)∨(1<⍴⍴fnm)∨1<≡fnm)/'INVALID FILE NAME'
- '⎕ES''ERASE TABLE ERROR'''⎕EA'z←(''drop table '',fnm) SQL∆Exec[_CF_DB]'''''
- z←'delete from _apl_component_files where file_name=?;' SQL∆Exec[_CF_DB] ⊂fnm
+ '⎕ES''ERASE TABLE ERROR'''⎕EA'z←(''drop table '',fnm) ⎕SQL[4,_CF_DB]'''''
+ z←'delete from _apl_component_files where file_name=?;' ⎕SQL[4,_CF_DB] ⊂fnm
  _CF_DELETE fnm
  z←0 0⍴0
 ∇
@@ -88,7 +87,7 @@
 
 ∇files←CF_FILES
  ⍝ Returns a list of component files
- files←'select file_name from _apl_component_files;' SQL∆Select[_CF_DB]''
+ files←'select file_name from _apl_component_files;' ⎕SQL[3,_CF_DB]''
 ∇
 
 ∇fhl←CF_INUSE
@@ -122,7 +121,7 @@
  ⎕ES((~cfi[1]∊_CF_MAP[;1])∨0≠≡cfi[1])/'INVALID FILE HANDLE'
  ⎕ES((0≠≡cfi[2])∨0≠1↑0⍴cfi[2])/'INVALID COMPONENT ID'
  ⎕ES((_CF_MAP[i←''⍴(cfi[1]=_CF_MAP[;1])/⍳1↑⍴_CF_MAP;3]≤cfi[2])∨cfi[2]<1)/'INVALID COMPONENT ID'
- r←('select sdata, ldata from ',(⊃_CF_MAP[i;2]),' where ikey=?') SQL∆Select[_CF_DB] cfi[2]
+ r←('select sdata, ldata from ',(⊃_CF_MAP[i;2]),' where ikey=?') ⎕SQL[3,_CF_DB] cfi[2]
  ⎕ES(1=⍴⍴r)/'COMPONENT NOT FOUND'
  r←¯14 ⎕CR (⊃r[1]),⊃(r←,r)[2]
 ∇
@@ -133,8 +132,8 @@
  ⎕ES((0=⍴,nfnm)∨(' '≠1↑0⍴nfnm)∨(1<⍴⍴nfnm)∨1<≡nfnm)/'INVALID NEW FILE NAME'
  ⎕ES(~CF_FILEEXISTS fnm)/'ORIGINAL FILE NAME DOES NOT EXIST'
  ⎕ES(CF_FILEEXISTS nfnm)/'NEW FILE NAME ALREADY EXISTS'
- '⎕ES''RENAME ERROR'''⎕EA'z←(''alter table '',fnm,'' rename to '',nfnm,'';'') SQL∆Exec[_CF_DB]'''''
- '⎕ES''RENAME ERROR'''⎕EA'z←''update _apl_component_files set file_name=? where file_name=?;'' SQL∆Exec[_CF_DB] nfnm fnm'
+ '⎕ES''RENAME ERROR'''⎕EA'z←(''alter table '',fnm,'' rename to '',nfnm,'';'') ⎕SQL[4,_CF_DB]'''''
+ '⎕ES''RENAME ERROR'''⎕EA'z←''update _apl_component_files set file_name=? where file_name=?;'' ⎕SQL[4,_CF_DB] nfnm fnm'
  ⍎(0≠i←_CF_FIND fnm)/'_CF_MAP[i;2]←⊂nfnm'
  z←0 0⍴0
 ∇
@@ -150,18 +149,18 @@
  ⎕ES((_CF_MAP[i;3]≤cfi[2])∨cfi[2]<1)/'INVALID COMPONENT ID'
  z←0 0⍴0
  data2←14 ⎕CR data
- r←('select ikey from ',(tbl←⊃_CF_MAP[i;2]),' where ikey=?;') SQL∆Select[_CF_DB]cfi[2]
+ r←('select ikey from ',(tbl←⊃_CF_MAP[i;2]),' where ikey=?;') ⎕SQL[3,_CF_DB]cfi[2]
  →((1=⍴⍴r)∧0=1↑⍴r)/NEW
  →(2000<⍴data2)/BIG∆CHANGE
- '⎕ES''WRITE ERROR'''⎕EA'r←(''update '',tbl,'' set sdata=?,ldata=null where ikey=?;'')SQL∆Exec[_CF_DB] data2 cfi[2]'
+ '⎕ES''WRITE ERROR'''⎕EA'r←(''update '',tbl,'' set sdata=?,ldata=null where ikey=?;'')⎕SQL[4,_CF_DB] data2 cfi[2]'
  →0
- BIG∆CHANGE: '⎕ES''WRITE ERROR'''⎕EA'r←(''update '',tbl,'' set sdata=null,ldata=? where ikey=?;'')SQL∆Exec[_CF_DB] data2 cfi[2]'
+ BIG∆CHANGE: '⎕ES''WRITE ERROR'''⎕EA'r←(''update '',tbl,'' set sdata=null,ldata=? where ikey=?;'')⎕SQL[4,_CF_DB] data2 cfi[2]'
  →0
  ⍝ INSERT code used to support ability to delete components in the middle
  NEW:→(2000<⍴data2)/BIG∆NEW
- '⎕ES''WRITE ERROR'''⎕EA'←(''insert into '',tbl,'' (ikey, sdata) values (?, ?);'')SQL∆Exec[_CF_DB] cfi[2] data2'
+ '⎕ES''WRITE ERROR'''⎕EA'←(''insert into '',tbl,'' (ikey, sdata) values (?, ?);'')⎕SQL[4,_CF_DB] cfi[2] data2'
  →0
- BIG∆NEW:'⎕ES''WRITE ERROR'''⎕EA'r←(''insert into '',tbl,'' (ikey, ldata) values (?, ?);'')SQL∆Exec[_CF_DB] cfi[2] data2'
+ BIG∆NEW:'⎕ES''WRITE ERROR'''⎕EA'r←(''insert into '',tbl,'' (ikey, ldata) values (?, ?);'')⎕SQL[4,_CF_DB] cfi[2] data2'
 ∇
 
 ∇r←fh _CF_ADD fnm
@@ -183,23 +182,22 @@
 ∇
 
 ∇cid←_CF_NEXT fnm
- cid←1+''⍴1↑,⊃('select max(ikey) from ',fnm,';') SQL∆Select[_CF_DB]''
+ cid←1+''⍴1↑,⊃('select max(ikey) from ',fnm,';') ⎕SQL[3,_CF_DB]''
 ∇
 
 ⎕CT←1E¯13
 
-⎕FC←,⎕UCS 46 44 8902 48 95 175
+⎕FC←".,⋆0_¯"
 
 ⎕IO←1
 
 ⎕L←0
 
-⎕LX←' ' ⍝ proto 1
-⎕LX←0⍴⎕LX ⍝ proto 2
+⎕LX←""
 
 ⎕PP←10
 
-⎕PR←,' '
+⎕PR←" "
 
 ⎕PS←0 0
 
@@ -209,7 +207,13 @@
 
 ⎕RL←1
 
-⎕TZ←¯5
+⎕TZ←¯6
 
 ⎕X←0
+
+
+
+
+
+
 

@@ -1,7 +1,7 @@
 
 
 A Component File System for GNU APL
-Blake McBride (blake@arahant.com)
+Blake McBride (blake@mcbridemail.com)
 
 This Component File System fully conforms to:
 Programming Language APL, Extended
